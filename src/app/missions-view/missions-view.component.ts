@@ -1,16 +1,17 @@
-import { Component } from '@angular/core';
-import { MissionsService } from './services/missions.service';
-import { Mission } from './models/mission.model';
+import { Component, OnInit } from '@angular/core';
+import { Mission } from '../models/mission.model';
 import { Title } from '@angular/platform-browser';
+import {MissionsService} from '../services/missions.service';
+
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'app-missions-view',
+  templateUrl: './missions-view.component.html',
+  styleUrls: ['./missions-view.component.css']
 })
-export class AppComponent {
+export class MissionsViewComponent implements OnInit {
 
-   missions: Mission[] = [];
+  missions: Mission[] = [];
 
   constructor(private missionsService: MissionsService, private titleService: Title) {
     titleService.setTitle('ISpy');
@@ -37,10 +38,11 @@ export class AppComponent {
     this.missions = this.missionsService.getMissionsByAddress();
   }
 
-
-
   showMostIsolatedCountry(){
     console.log('Most isolated country is: ' + this.missionsService.getMostIsolatedCountry());
+  }
+
+  ngOnInit() {
   }
 
 }

@@ -1,0 +1,45 @@
+input {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+
+input:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+hr {
+  border: 1px solid #f1f1f1;
+  margin-bottom: 25px;
+}
+
+button {
+  background-color: #41b3ab;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+  transition: opacity .5s;
+}
+
+button:hover {
+  opacity:1;
+}
+
+.createbtn {
+  float: right;
+  width: 160px;
+}
+
+
+.container {
+  padding: 16px;
+  width: 50%;
+}

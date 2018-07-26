@@ -20,6 +20,24 @@ export class MissionsService {
     return this.missions;
   }
 
+  getMissionsByDate(): Mission[]{
+    return this.missions.sort((m1, m2) =>
+      Date.parse(m1.date) - Date.parse(m2.date)
+    );
+  }
+
+  getMissionsByAgent(): Mission[]{
+    return this.missions.sort((m1, m2) => m1.agent.localeCompare(m2.agent));
+  }
+
+  getMissionsByCountry(): Mission[]{
+    return this.missions.sort((m1, m2) => m1.country.localeCompare(m2.country));
+  }
+
+  getMissionsByAddress(): Mission[]{
+    return this.missions.sort((m1, m2) => m1.address.localeCompare(m2.address));
+  }
+
   getMostIsolatedCountry(){
     return this.isolationMap;
   }
