@@ -1,0 +1,18 @@
+<div *ngFor="let mission of missions">
+  <div class="missions-container">
+    <div class="mission-title">
+      {{ mission[0].country }}
+    </div>
+    <div *ngFor="let missionItem of mission">
+      <div class="mission-detail">
+        {{ missionItem.agent }}
+      </div>
+      <div class="mission-detail">
+        {{ missionItem.address }}
+      </div>
+      <div class="mission-detail">
+        {{ missionItem.date }}
+      </div>
+    </div>
+  </div>
+</div>

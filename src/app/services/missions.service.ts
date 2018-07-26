@@ -56,9 +56,13 @@ export class MissionsService {
       this.missions.push(missionObject);
     }
 
-    Object.keys(tmpDict).forEach((key) => {
-      if (tmpDict[key].length === 1){
-        const mission = tmpDict[key][0] as Mission;
+    this.createIsolationList(tmpDict);
+  }
+
+  private createIsolationList(dict: object): void{
+    Object.keys(dict).forEach((key) => {
+      if (dict[key].length === 1){
+        const mission = dict[key][0] as Mission;
         const country = mission.country;
         if (!this.isolationMap.hasOwnProperty(country)){
           this.isolationMap[country] = [];

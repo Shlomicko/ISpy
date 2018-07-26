@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MissionsManagerComponent } from './missions-manager.component';
+import { IsolatedMissionsComponent } from './isolated-missions.component';
 
-describe('MissionsManagerComponent', () => {
-  let component: MissionsManagerComponent;
-  let fixture: ComponentFixture<MissionsManagerComponent>;
+describe('IsolatedMissionsComponent', () => {
+  let component: IsolatedMissionsComponent;
+  let fixture: ComponentFixture<IsolatedMissionsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MissionsManagerComponent ]
+      declarations: [ IsolatedMissionsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MissionsManagerComponent);
+    fixture = TestBed.createComponent(IsolatedMissionsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

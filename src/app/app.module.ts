@@ -4,8 +4,8 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { MissionsViewComponent } from './missions-view/missions-view.component';
-import { MissionsManagerComponent } from './missions-manager/missions-manager.component';
 import {RouterModule, Routes} from '@angular/router';
+import { IsolatedMissionsComponent } from './isolated-missions/isolated-missions.component';
 
 const routes: Routes = [
   {
@@ -17,8 +17,8 @@ const routes: Routes = [
     component: MissionsViewComponent
   },
   {
-    path: 'manage',
-    component: MissionsManagerComponent
+    path: 'isolated',
+    component: IsolatedMissionsComponent
   }
 
 ];
@@ -29,7 +29,7 @@ const routes: Routes = [
     HeaderComponent,
     HomeComponent,
     MissionsViewComponent,
-    MissionsManagerComponent,
+    IsolatedMissionsComponent,
   ],
   imports: [
     BrowserModule, RouterModule,
