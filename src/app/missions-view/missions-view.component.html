@@ -1,32 +1,33 @@
-<table>
-  <thead>
-  <tr>
-    <th (click)="sortMissionsByAgents()">
-      Agent ID
-    </th>
-    <th (click)="sortMissionsByCountry()">
-      Country
-    </th>
-    <th (click)="sortMissionsByAddress()">
-      Address
-    </th>
-    <th (click)="sortMissionsByDate()">
-      Date
-    </th>
-  </tr>
-  </thead>
+<div>
+  <table>
+    <thead>
+    <tr>
+      <th (click)="sortMissionsByAgents()">
+        Agent ID
+      </th>
+      <th (click)="sortMissionsByCountry()">
+        Country
+      </th>
+      <th (click)="sortMissionsByAddress()">
+        Address
+      </th>
+      <th (click)="sortMissionsByDate()">
+        Date
+      </th>
+    </tr>
+    </thead>
 
-  <tbody>
-  <tr *ngFor="let mission of missions">
-    <td>{{mission.agent}}</td>
-    <td>{{mission.country}}</td>
-    <td>{{mission.address}}</td>
-    <td>{{mission.date}}</td>
-  </tr>
-  <tr>
-    <td class="tableFooter" colspan="4">{{getMissions().length}} Missions</td>
-  </tr>
-  </tbody>
+    <tbody>
+    <tr *ngFor="let mission of missions">
+      <td>{{mission.agent}}</td>
+      <td>{{mission.country}}</td>
+      <td>{{mission.address}}</td>
+      <td>{{mission.date}}</td>
+    </tr>
+    <tr>
+      <td class="tableFooter" colspan="4">{{getMissions().length}} Missions</td>
+    </tr>
+    </tbody>
 
-</table>
-
+  </table>
+</div>

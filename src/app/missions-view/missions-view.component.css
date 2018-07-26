@@ -1,3 +1,7 @@
+div{
+  padding: 4% 8% 0 8%;
+}
+
 table {
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border: 1px solid #ddd;
@@ -20,7 +24,7 @@ td {
   color: #777777;
 }
 
-table th {
+th {
   padding-top: 12px;
   padding-bottom: 12px;
   padding-left: 6px;
@@ -28,6 +32,7 @@ table th {
   background-color: #FAFAFA;
   color: #575757;
   border: 1px solid #ddd;
+  height: 40%;
 }
 
 .tableFooter {
