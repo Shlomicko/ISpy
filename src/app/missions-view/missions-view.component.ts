@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Mission } from '../models/mission.model';
 import { Title } from '@angular/platform-browser';
 import {MissionsService} from '../services/missions.service';
+import {MapServiceService} from '../services/map-service.service';
 
 
 @Component({
@@ -13,9 +14,14 @@ export class MissionsViewComponent implements OnInit {
 
   missions: Mission[] = [];
 
-  constructor(private missionsService: MissionsService, private titleService: Title) {
+  constructor(private missionsService: MissionsService, private titleService: Title, private mapService: MapServiceService) {
     titleService.setTitle('ISpy');
     this.sortMissionsByCountry();
+    this.mapService.init(this.onMapServiceReady);
+  }
+
+  private onMapServiceReady(): void{
+
   }
 
   getMissions(): Mission[]{
