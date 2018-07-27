@@ -1,3 +1,11 @@
+.farAway{
+  color: red;
+}
+
+.closest{
+  color: #1bb819
+}
+
 div{
   padding: 4% 8% 0 8%;
 }
@@ -33,6 +41,7 @@ th {
   color: #575757;
   border: 1px solid #ddd;
   height: 40%;
+  cursor: pointer;
 }
 
 .tableFooter {

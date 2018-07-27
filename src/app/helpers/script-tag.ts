@@ -26,7 +26,7 @@ export class ScriptTag {
     return this;
   }
 
-  public execute(): void{
+  public load(): void{
     document.getElementsByTagName('head')[0].appendChild(this.script);
   }
 }

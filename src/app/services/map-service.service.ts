@@ -1,37 +1,46 @@
 import {Injectable} from '@angular/core';
 import {ScriptTag} from '../helpers/script-tag';
-import {} from '@types/googlemaps';
-import DirectionsRequest = google.maps.DirectionsRequest;
-import UnitSystem = google.maps.UnitSystem;
-import DirectionsResult = google.maps.DirectionsResult;
-import DirectionsStatus = google.maps.DirectionsStatus;
-import DirectionsService = google.maps.DirectionsService;
+import { } from '@types/googlemaps';
+import { GeoPoint } from '../models/geo-point.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapServiceService {
 
+  get newMapService(): MapServiceService {
+    return new MapServiceService();
+  }
+
   constructor() {
 
   }
-
-  readonly api_key: string = 'AIzaSyCIc9TG1ouuKLICMJrNdEX56tUhIwDj0js';
-
   private onReadyCallback: Function;
 
-  private directionService: google.maps.DirectionsService;
+  readonly api_key: string = 'AIzaSyBEPsDF48p9gwXkftBakpJ-lFpYsftlBrU';
 
-  public init(onReady: Function) {
-    this.onReadyCallback = onReady;
-    this.directionService = new DirectionsService();
-    this.loadScript('https://maps.googleapis.com/maps/api/js?key=' + this.api_key);
+  public init(callback: Function) {
+    this.onReadyCallback = callback;
+    this.loadScript('https://maps.googleapis.com/maps/api/js?libraries=geometry&key=' + this.api_key);
   }
 
-  public getDistanceBetweenAddress(address1: string,
-                                   address2: string,
-                                   callback: (result: number, status: string) => void): void {
-    this.directionService.route(this.getDirectionsRequest(address1, address2), this.onRouteResponse);
+
+  public getDistance(point1: GeoPoint, point2: GeoPoint): number{
+    const p1: google.maps.LatLng = new google.maps.LatLng(point1.latitude, point1.longitude);
+    const p2: google.maps.LatLng = new google.maps.LatLng(point2.latitude, point2.longitude);
+    return google.maps.geometry.spherical.computeDistanceBetween(p1, p2);
+  }
+
+  public getLatLongForAddress(address: string, callback: (geoPoint: GeoPoint) => void): void{
+    const geocoder = new google.maps.Geocoder();
+    const request: google.maps.GeocoderRequest = {};
+    request.address = address;
+    geocoder.geocode(request, (results, status) => {
+        if (status === google.maps.GeocoderStatus.OK){
+          const location: google.maps.LatLng = results[0].geometry.location;
+          callback(new GeoPoint(location.lat(), location.lng()));
+        }
+    });
   }
 
   private loadScript(url: string) {
@@ -39,32 +48,15 @@ export class MapServiceService {
     const node = new ScriptTag();
     node.setSource(url)
       .setType('text/javascript')
-      .onLodListener(this.onScriptLoaded)
-      .execute();
+      .onLodListener(this.onScriptLoaded.bind(this))
+      .load();
     console.log('Url:' + url);
   }
 
   private onScriptLoaded() {
     console.log('Inside onScriptLoaded:');
-    if (this.onReadyCallback != null) {
+    if (this.onReadyCallback) {
       this.onReadyCallback();
     }
   }
-
-  private getDirectionsRequest(address1: string, address2: string): DirectionsRequest {
-    const request: DirectionsRequest = {};
-    request.origin = address1;
-    request.destination = address2;
-    request.avoidFerries = false;
-    request.avoidHighways = false;
-    request.avoidTolls = false;
-    request.unitSystem = UnitSystem.IMPERIAL;
-    request.provideRouteAlternatives = false;
-    return request;
-  }
-
-  private onRouteResponse(result: DirectionsResult, status: DirectionsStatus): void {
-
-  }
-
 }

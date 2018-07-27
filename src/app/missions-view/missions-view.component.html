@@ -19,13 +19,13 @@
 
     <tbody>
     <tr *ngFor="let mission of missions">
-      <td>{{mission.agent}}</td>
-      <td>{{mission.country}}</td>
-      <td>{{mission.address}}</td>
-      <td>{{mission.date}}</td>
+      <td [ngClass]="{ farAway: mission.farFromHQ === true, closest: mission.nearToHQ === true }">{{mission.agent}}</td>
+      <td [ngClass]="{ farAway: mission.farFromHQ === true, closest: mission.nearToHQ === true }">{{mission.country}}</td>
+      <td [ngClass]="{ farAway: mission.farFromHQ === true, closest: mission.nearToHQ === true }">{{mission.address}}</td>
+      <td [ngClass]="{ farAway: mission.farFromHQ === true, closest: mission.nearToHQ === true }">{{mission.date}}</td>
     </tr>
     <tr>
-      <td class="tableFooter" colspan="4">{{getMissions().length}} Missions</td>
+      <td class="tableFooter" colspan="4">{{ missions.length }} Missions</td>
     </tr>
     </tbody>
 

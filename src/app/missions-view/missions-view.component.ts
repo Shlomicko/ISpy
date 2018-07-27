@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Mission } from '../models/mission.model';
-import { Title } from '@angular/platform-browser';
+import {Component, OnInit} from '@angular/core';
+import {Mission} from '../models/mission.model';
+import {Title} from '@angular/platform-browser';
 import {MissionsService} from '../services/missions.service';
 import {MapServiceService} from '../services/map-service.service';
+import {GeoPoint} from '../models/geo-point.model';
 
 
 @Component({
@@ -13,39 +14,53 @@ import {MapServiceService} from '../services/map-service.service';
 export class MissionsViewComponent implements OnInit {
 
   missions: Mission[] = [];
+  numMissions = 0;
+
 
   constructor(private missionsService: MissionsService, private titleService: Title, private mapService: MapServiceService) {
     titleService.setTitle('ISpy');
-    this.sortMissionsByCountry();
-    this.mapService.init(this.onMapServiceReady);
+    this.numMissions = missionsService.numMissions;
+    this.sortMissionsByDate();
+    this.mapService.init(this.onMapServiceReady.bind(this));
   }
 
-  private onMapServiceReady(): void{
+  readonly MI6_HQ_ADDRESS: string = '10 Downing St, Westminster, London SW1A 2AB, UK';
+  private mi6Coordinates: GeoPoint;
+
+  private onMapServiceReady(): void {
+
+    this.mapService.getLatLongForAddress(this.MI6_HQ_ADDRESS, (geoPoint: GeoPoint) => {
+      this.mi6Coordinates = geoPoint;
+      this.setMissionsCoordinates();
+    });
 
   }
 
-  getMissions(): Mission[]{
-    return this.missionsService.getMissions();
+  private setMissionsCoordinates(): void {
+    console.log('MI6 Coordinates:' + this.mi6Coordinates);
+    for (const mission of this.missions) {
+      mission.setHQCoordinates(this.mi6Coordinates);
+      mission.setLatAndLongCoordinates(this.mapService.newMapService);
+    }
+
+    this.missions = this.missionsService.getMissionsByDistanceFromHQ();
   }
 
-  sortMissionsByAgents(): void{
+
+  sortMissionsByAgents(): void {
     this.missions = this.missionsService.getMissionsByAgent();
   }
 
-  sortMissionsByDate(): void{
+  sortMissionsByDate(): void {
     this.missions = this.missionsService.getMissionsByDate();
   }
 
-  sortMissionsByCountry(): void{
+  sortMissionsByCountry(): void {
     this.missions = this.missionsService.getMissionsByCountry();
   }
 
-  sortMissionsByAddress(): void{
+  sortMissionsByAddress(): void {
     this.missions = this.missionsService.getMissionsByAddress();
-  }
-
-  showMostIsolatedCountry(){
-    console.log('Most isolated country is: ' + this.missionsService.getMostIsolatedCountry());
   }
 
   ngOnInit() {
