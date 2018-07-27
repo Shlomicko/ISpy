@@ -43,7 +43,11 @@ export class MissionsViewComponent implements OnInit {
       mission.setLatAndLongCoordinates(this.mapService.newMapService);
     }
 
-    this.missions = this.missionsService.getMissionsByDistanceFromHQ();
+    setTimeout(() => {
+      this.missions = this.missionsService.getMissionsByDistanceFromHQ();
+      console.log(this.missions);
+    }, 1000);
+
   }
 
 
