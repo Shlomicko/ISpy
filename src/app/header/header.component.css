@@ -1,9 +1,10 @@
 ul.TopBar {
   list-style-type: none;
   margin: 0;
-  padding: 10px;
+  padding-bottom: 0;
   overflow: hidden;
-  background-color: #333;
+  background-color: #000000;
+  opacity: .7;
 }
 
 .TopBar li {
@@ -15,14 +16,17 @@ ul.TopBar {
   text-decoration: none;
   cursor: pointer;
   user-select: none;
+  border: none;
+  bottom: 0;
+  outline: 0;
 }
 
 .TopBar li:hover {
-  background-color: #9c9c9c;
+  background-color: #111;
 }
 
 .active {
-  background-color: #9c9c9c;
+  background-color: #111;
   cursor: text;
-  user-select: text;
+  user-select: none;
 }

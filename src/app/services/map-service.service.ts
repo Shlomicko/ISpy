@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ScriptTag} from '../helpers/script-tag';
-import { } from '@types/googlemaps';
-import { GeoPoint } from '../models/geo-point.model';
+import {} from '@types/googlemaps';
+import {GeoPoint} from '../models/geo-point.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +15,12 @@ export class MapServiceService {
   constructor() {
 
   }
+
   private onReadyCallback: Function;
 
   readonly api_key: string = 'AIzaSyBEPsDF48p9gwXkftBakpJ-lFpYsftlBrU';
+
+  private _scriptLoaded = false;
 
   public init(callback: Function) {
     this.onReadyCallback = callback;
@@ -25,36 +28,44 @@ export class MapServiceService {
   }
 
 
-  public getDistance(point1: GeoPoint, point2: GeoPoint): number{
+  public getDistance(point1: GeoPoint, point2: GeoPoint): number {
     const p1: google.maps.LatLng = new google.maps.LatLng(point1.latitude, point1.longitude);
     const p2: google.maps.LatLng = new google.maps.LatLng(point2.latitude, point2.longitude);
     return google.maps.geometry.spherical.computeDistanceBetween(p1, p2);
   }
 
-  public getLatLongForAddress(address: string, callback: (geoPoint: GeoPoint) => void): void{
+  public getLatLongForAddress(address: string, callback: (geoPoint: GeoPoint, status: string) => void): void {
     const geocoder = new google.maps.Geocoder();
     const request: google.maps.GeocoderRequest = {};
     request.address = address;
     geocoder.geocode(request, (results, status) => {
-        if (status === google.maps.GeocoderStatus.OK){
-          const location: google.maps.LatLng = results[0].geometry.location;
-          callback(new GeoPoint(location.lat(), location.lng()));
-        }
+      if (status === google.maps.GeocoderStatus.OK) {
+        console.log('geocoder status: ' + status);
+        const location: google.maps.LatLng = results[0].geometry.location;
+        callback(new GeoPoint(location.lat(), location.lng()), status.toString().toLowerCase());
+      }else{
+        callback(null, status.toString().toLowerCase());
+      }
     });
   }
 
   private loadScript(url: string) {
     console.log('preparing to load...');
-    const node = new ScriptTag();
-    node.setSource(url)
-      .setType('text/javascript')
-      .onLodListener(this.onScriptLoaded.bind(this))
-      .load();
-    console.log('Url:' + url);
+    if (this._scriptLoaded) {
+      this.onReadyCallback();
+    } else {
+      const node = new ScriptTag();
+      node.setSource(url)
+        .setType('text/javascript')
+        .onLodListener(this.onScriptLoaded.bind(this))
+        .load();
+      console.log('Url:' + url);
+    }
   }
 
   private onScriptLoaded() {
     console.log('Inside onScriptLoaded:');
+    this._scriptLoaded = true;
     if (this.onReadyCallback) {
       this.onReadyCallback();
     }

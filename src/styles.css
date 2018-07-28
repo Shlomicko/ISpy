@@ -4,3 +4,8 @@ html, body {
   height: 100%;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
+
+html {
+  background: url('/assets/007.jpg');
+  background-size: cover;
+}
