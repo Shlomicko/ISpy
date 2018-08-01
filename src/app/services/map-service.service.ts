@@ -34,19 +34,22 @@ export class MapServiceService {
     return google.maps.geometry.spherical.computeDistanceBetween(p1, p2);
   }
 
-  public getLatLongForAddress(address: string, callback: (geoPoint: GeoPoint, status: string) => void): void {
-    const geocoder = new google.maps.Geocoder();
-    const request: google.maps.GeocoderRequest = {};
-    request.address = address;
-    geocoder.geocode(request, (results, status) => {
-      if (status === google.maps.GeocoderStatus.OK) {
-        console.log('geocoder status: ' + status);
-        const location: google.maps.LatLng = results[0].geometry.location;
-        callback(new GeoPoint(location.lat(), location.lng()), status.toString().toLowerCase());
-      }else{
-        callback(null, status.toString().toLowerCase());
-      }
+  public getLatLongForAddress(address: string): Promise<GeoPoint> {
+    const promise = new Promise<GeoPoint>(function (resolve, reject) {
+      const request: google.maps.GeocoderRequest = {};
+      request.address = address;
+      const geoCoder = new google.maps.Geocoder();
+      geoCoder.geocode(request, (results, status) => {
+        if (status === google.maps.GeocoderStatus.OK) {
+          const location: google.maps.LatLng = results[0].geometry.location;
+          resolve(new GeoPoint(location.lat(), location.lng()));
+        } else {
+          reject(status.toString().toLowerCase());
+        }
+      });
     });
+
+    return promise;
   }
 
   private loadScript(url: string) {

@@ -4,6 +4,7 @@ import {GeoPoint} from './geo-point.model';
 export class Mission implements IDeserializable {
   set distanceFromHQ(value: number) {
     this._distanceFromHQ = value;
+    console.log('MissionModel, distance from HQ: ' + value, this.agent, this.country);
   }
   set missionCoordinates(value: GeoPoint) {
     this._missionCoordinates = value;

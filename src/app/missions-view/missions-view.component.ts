@@ -22,11 +22,6 @@ export class MissionsViewComponent implements OnInit {
               private titleService: Title,
               private mapService: MapServiceService) {
     titleService.setTitle('ISpy');
-    this.mapService.init(this.onMapServiceReady.bind(this));
-  }
-
-  private onMapServiceReady(): void {
-    console.log('In mission-view.component, onMapServiceReady');
     this._coordinatesHelper = new MissionsCoordinatesManager(this.missionsService, this.mapService);
     this._coordinatesHelper.init(this.onMissionsCoordinatesReady.bind(this));
   }

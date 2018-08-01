@@ -22,51 +22,46 @@ export class MissionsCoordinatesManager {
 
   public init(onComplete: Function) {
     this._onComplete = onComplete;
-    this.setHQCoordinates();
+    this._mapService.init(this.setHQCoordinates.bind(this));
   }
 
   private setHQCoordinates(): void {
-    this._mapService.getLatLongForAddress(this.MI6_HQ_ADDRESS, (geoPoint: GeoPoint) => {
-      this.mi6Coordinates = geoPoint;
-      this.setMissionsCoordinates();
+
+    const self = this;
+    this._mapService.getLatLongForAddress(this.MI6_HQ_ADDRESS)
+      .then(function (geoPoint) {
+        self.mi6Coordinates = geoPoint;
+        self.setMissionsCoordinates().then(function (result) {
+          self.setMissionsByDistanceFromHQ();
+        });
+      });
+  }
+
+  private setMissionsCoordinates(): Promise<any> {
+    console.log('MI6 Coordinates:' + this.mi6Coordinates);
+    const missions = this._missionsService.getMissions();
+    return Promise.all(missions.map(this.getMissionCoordinatesFromAddress.bind(this)));
+  }
+
+  private getMissionCoordinatesFromAddress(mission: Mission): Promise<GeoPoint> {
+    return new Promise((resolve, reject) => {
+      const mapServiceInstance = this._mapService.newMapService;
+      mapServiceInstance.getLatLongForAddress(mission.fullAddress).then(geoPoint => {
+        mission.missionCoordinates = geoPoint;
+        mission.distanceFromHQ = mapServiceInstance.getDistance(geoPoint, this.mi6Coordinates);
+        resolve(geoPoint);
+      }).catch(function (error) {
+        reject(error);
+      });
     });
   }
 
-  private setMissionsCoordinates(): void {
-    console.log('MI6 Coordinates:' + this.mi6Coordinates);
-    const missions = this._missionsService.getMissions();
-    const numMissions = missions.length;
-    console.log('numMissions: ' + numMissions);
-    console.log('this._missionCoordinateAssignCounter: ' + this._missionCoordinateAssignCounter);
-    let queryValid = true;
-    for (const mission of missions) {
-      const maps = this._mapService.newMapService;
-      maps.getLatLongForAddress(mission.fullAddress, (geoPoint: GeoPoint, status: string) => {
-        if(queryValid) {
-          if (status !== 'ok') {
-            queryValid = false;
-            alert('Could not get coordinates, Google map status: ' + status + '\nPlease try again later.');
-            this.setMissionsByDistanceFromHQ();
-            return;
-          }
-          mission.missionCoordinates = geoPoint;
-          mission.distanceFromHQ = maps.getDistance(mission.missionCoordinates, this.mi6Coordinates);
-          console.log('onLocationReady, distance: ' + mission.distanceFromHQ + ' : ' + mission.country);
-          this._missionCoordinateAssignCounter++;
-          if (this._missionCoordinateAssignCounter >= numMissions) {
-            this.setMissionsByDistanceFromHQ();
-          }
-        }
-      });
-    }
-  }
-
   private setMissionsByDistanceFromHQ(): void {
-
+    console.log('All coordinates ready...maybe');
     const missions = this._missionsService.getMissions();
     this.setFarMission(missions);
     this.setNearMission(missions);
-    if (this._onComplete){
+    if (this._onComplete) {
       this._onComplete();
     }
   }
