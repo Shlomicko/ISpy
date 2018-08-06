@@ -18,7 +18,7 @@ export class MapServiceService {
 
   private onReadyCallback: Function;
 
-  readonly api_key: string = 'AIzaSyBEPsDF48p9gwXkftBakpJ-lFpYsftlBrU';
+  readonly api_key: string = 'lalala';
 
   private _scriptLoaded = false;
 
